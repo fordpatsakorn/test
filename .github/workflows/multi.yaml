@@ -29,7 +29,7 @@ jobs:
   call-workflow-one:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(needs.find-out-changes.outputs.workflows, 'one')
+    if: contains(needs.find-out-changes.outputs.workflows, 'apps/one')
     steps:
       - name: Call Reusable Workflow One
         uses: ./.github/workflows/one/one.yaml
@@ -37,7 +37,7 @@ jobs:
   call-workflow-two:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(needs.find-out-changes.outputs.workflows, 'two')
+    if: contains(needs.find-out-changes.outputs.workflows, 'app/two')
     steps:
       - name: Call Reusable Workflow Two
         uses: ./.github/workflows/two/two.yaml
@@ -45,7 +45,7 @@ jobs:
   call-workflow-three:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(needs.find-out-changes.outputs.workflows, 'three')
+    if: contains(needs.find-out-changes.outputs.workflows, 'app/three')
     steps:
       - name: Call Reusable Workflow Three
         uses: ./.github/workflows/three/three.yaml
