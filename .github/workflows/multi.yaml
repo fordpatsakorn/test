@@ -24,9 +24,8 @@ jobs:
       - name: 'Set output in the matrix format'
         id: set-output
         run: |
-          changed_dirs=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | jq -r '.[]')
-          echo "$changed_dirs" | jq -ncR '[inputs | {dir: ., basename: (.|basename)}]' > changed_directories.json
-          echo "changed_directories=$(cat changed_directories.json)" >> "$GITHUB_OUTPUT"
+          echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+          echo ${steps.changed-files.outputs.all_changed_files}
 
   do-stuff:
     runs-on: ubuntu-latest
