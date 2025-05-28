@@ -42,7 +42,7 @@ jobs:
   call-app-one:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(fromJson(${{ needs.find-out-changes.outputs.changed_directories }}), 'apps/one')
+    if: contains(fromJson(needs.find-out-changes.outputs.changed_directories), 'apps/one')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow One
@@ -51,7 +51,7 @@ jobs:
   call-app-two:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(fromJson(${{ needs.find-out-changes.outputs.changed_directories }}), 'apps/two')
+    if: contains(fromJson(needs.find-out-changes.outputs.changed_directories), 'apps/two')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow Two
@@ -60,7 +60,7 @@ jobs:
   call-app-three:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(fromJson(${{ needs.find-out-changes.outputs.changed_directories }}), 'apps/three')
+    if: contains(fromJson(needs.find-out-changes.outputs.changed_directories), 'apps/three')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow Three
