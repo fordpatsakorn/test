@@ -6,7 +6,7 @@ jobs:
   find-out-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_directories: ${{ steps.set-output.outputs.changed_directories }}
+      workflows: ${{ steps.set-output.outputs.changed_directories }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -14,27 +14,41 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v46.0.5
+        uses: tj-actions/changed-files@v35
         with:
           dir_names: true
           dir_names_max_depth: 2
-          json: true
+          json: false
           quotepath: false
-          path: './.github'
+          separator: ','
 
       - name: 'Set output in the matrix format'
         id: set-output
-        run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
-
-  do-stuff:
+        run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
+        
+  call-app-one:
     runs-on: ubuntu-latest
-    if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}
-    strategy:
-      matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
-    needs:
-      - find-out-changes
+    needs: find-out-changes
+    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/one')
     steps:
       - uses: actions/checkout@v4
-      - uses: jenseng/dynamic-uses@v1
-        with:
-          uses: ./${{ matrix.dir }}/.github
+      - name: Call Reusable Workflow One
+        uses: ./apps/one/.github
+
+  call-app-two:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/two')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Call Reusable Workflow Two
+        uses: ./apps/two/.github
+
+  call-app-three:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/three')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Call Reusable Workflow Three
+        uses: ./apps/three/.github
