@@ -24,7 +24,7 @@ jobs:
 
       - name: 'Set output in the matrix format'
         id: set-output
-        run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
+        run: echo "changed_directories=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
 
   debug:
     runs-on: ubuntu-latest
