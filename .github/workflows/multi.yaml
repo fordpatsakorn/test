@@ -26,6 +26,13 @@ jobs:
         id: set-output
         run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
 
+  test:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    steps:
+      - name: test
+        run: echo ${needs.find-out-changes.outputs.workflows}
+        
   call-workflow-one:
     runs-on: ubuntu-latest
     needs: find-out-changes
