@@ -39,6 +39,7 @@ jobs:
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/one')
     steps:
       - name: Call Reusable Workflow One
+        uses: actions/checkout@v2
         uses: ./.github/workflows/one/one.yaml
 
   call-workflow-two:
@@ -47,6 +48,7 @@ jobs:
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/two')
     steps:
       - name: Call Reusable Workflow Two
+        uses: actions/checkout@v2
         uses: ./.github/workflows/two/two.yaml
 
   call-workflow-three:
@@ -55,6 +57,7 @@ jobs:
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/three')
     steps:
       - name: Call Reusable Workflow Three
+        uses: actions/checkout@v2
         uses: ./.github/workflows/three/three.yaml
 
   # do-stuff:
