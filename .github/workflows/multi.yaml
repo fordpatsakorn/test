@@ -23,7 +23,16 @@ jobs:
 
       - name: 'Set output in the matrix format'
         id: set-output
-        run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+        run: |
+          changed_dirs=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | jq -r '.[]')
+          output=""
+          for dir in $changed_dirs; do
+            base_name=$(basename "$dir")
+            output="$output{\"dir\": \"$dir\", \"basename\": \"$base_name\"},"
+          done
+          # Remove the trailing comma
+          output="[${output%,}]"
+          echo "changed_directories=$output" >> "$GITHUB_OUTPUT"
 
   do-stuff:
     runs-on: ubuntu-latest
@@ -34,4 +43,4 @@ jobs:
       - find-out-changes
     steps:
       - uses: actions/checkout@v3
-      - run: zip ${{ matrix.dir }} etc.
+      - run: echo ${{ matrix.dir }}
