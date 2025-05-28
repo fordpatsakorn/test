@@ -38,24 +38,27 @@ jobs:
     needs: find-out-changes
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/one')
     steps:
+      - uses: actions/checkout@v4
       - name: Call Reusable Workflow One
-        uses: fordpatsakorn/test-auto-versioning/.github/workflows/one/one.yaml
+        uses: ./.github/workflows/one/one.yaml
 
   call-workflow-two:
     runs-on: ubuntu-latest
     needs: find-out-changes
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/two')
     steps:
+      - uses: actions/checkout@v4
       - name: Call Reusable Workflow Two
-        uses: fordpatsakorn/test-auto-versioning/.github/workflows/two/two.yaml
+        uses: ./.github/workflows/two/two.yaml
 
   call-workflow-three:
     runs-on: ubuntu-latest
     needs: find-out-changes
     if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/three')
     steps:
+      - uses: actions/checkout@v4
       - name: Call Reusable Workflow Three
-        uses: fordpatsakorn/test-auto-versioning/.github/workflows/three/three.yaml
+        uses: ./.github/workflows/three/three.yaml
 
   # do-stuff:
   #   runs-on: ubuntu-latest
