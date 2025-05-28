@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
-      matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
+      matrix: 
+        dir: ["one/one.yaml", "two/two.yaml"] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
     needs:
       - find-out-changes
     steps:
-      - uses: actions/checkout@v3
-      - run: echo ${{ matrix.dir }} etc.
+      - uses: ./github/workflows/${{ matrix.dir }}
