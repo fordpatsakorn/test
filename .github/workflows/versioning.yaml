@@ -32,7 +32,7 @@ jobs:
       - name: 'Set output in the matrix format'
         id: set-output
         run: echo "dirs={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
-        run: echo "dirs=${{ steps.changed-dir.outputs.all_changed_dir }}" >> "$GITHUB_OUTPUT"
+        # run: echo "dirs=${{ steps.changed-dir.outputs.all_changed_dir }}" >> "$GITHUB_OUTPUT"
 
   bump-version:
     if: github.event.pull_request.merged == true
