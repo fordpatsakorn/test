@@ -20,22 +20,46 @@ jobs:
           dir_names_max_depth: 2  # This is optional. If not provided, full subdirectories' paths will be provided. Use it if you need to trim the output. See docs for details: https://github.com/tj-actions/changed-files/tree/main#inputs.
           json: false
           quotepath: false
+          separator: ','
 
       - name: 'Set output in the matrix format'
         id: set-output
-        run: echo "changed_directories={\"dir\":$(basename ${{ steps.changed-files.outputs.all_changed_files }})}" >> "$GITHUB_OUTPUT"
+        run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
 
-  do-stuff:
+  call-workflow-one:
     runs-on: ubuntu-latest
-    if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
-    strategy:
-      matrix: 
-        dir: [one/one.yaml, two/two.yaml] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
-    needs:
-      - find-out-changes
+    needs: find-out-changes
+    if: contains(needs.find-out-changes.outputs.workflows, 'one')
     steps:
-      - uses: jenseng/dynamic-uses@v1
-        with:
-          uses: actions/checkout@v4
-          uses: ./github/workflows/${{ matrix.dir }}
+      - name: Call Reusable Workflow One
+        uses: ./.github/workflows/one/one.yaml
+
+  call-workflow-two:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    if: contains(needs.find-out-changes.outputs.workflows, 'two')
+    steps:
+      - name: Call Reusable Workflow Two
+        uses: ./.github/workflows/two/two.yaml
+
+  call-workflow-three:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    if: contains(needs.find-out-changes.outputs.workflows, 'three')
+    steps:
+      - name: Call Reusable Workflow Three
+        uses: ./.github/workflows/three/three.yaml
+
+  # do-stuff:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
+  #   strategy:
+  #     matrix: 
+  #       dir: [one/one.yaml, two/two.yaml] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
+  #   needs:
+  #     - find-out-changes
+  #   steps:
+  #     - uses: jenseng/dynamic-uses@v1
+  #       with:
+  #         uses: ./github/workflows/${{ matrix.dir }}
 
