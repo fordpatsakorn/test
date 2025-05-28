@@ -33,6 +33,7 @@ jobs:
     needs:
       - find-out-changes
     steps:
+      - uses: actions/checkout@v4
       - uses: jenseng/dynamic-uses@v1
         with:
           uses: ./${{ matrix.dir }}/.github
