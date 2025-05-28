@@ -6,3 +6,4 @@ runs:
     - name: a step
       run: |
         echo two action is ran
+      shell: bash
