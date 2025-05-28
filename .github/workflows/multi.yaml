@@ -6,7 +6,7 @@ jobs:
   find-out-changes:
     runs-on: ubuntu-latest
     outputs:
-      workflows: ${{ steps.set-output.outputs.changed_directories }}
+      changed_directories: ${{ steps.set-output.outputs.changed_directories }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,7 +18,7 @@ jobs:
         with:
           dir_names: true
           dir_names_max_depth: 2
-          json: false
+          json: true
           quotepath: false
           separator: ','
 
@@ -29,7 +29,7 @@ jobs:
   call-app-one:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/one')
+    if: contains(${{ needs.find-out-changes.outputs.changed_directories }}, 'apps/one')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow One
@@ -38,7 +38,7 @@ jobs:
   call-app-two:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/two')
+    if: contains(${{ needs.find-out-changes.outputs.changed_directories }}, 'apps/two')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow Two
@@ -47,7 +47,7 @@ jobs:
   call-app-three:
     runs-on: ubuntu-latest
     needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/three')
+    if: contains(${{ needs.find-out-changes.outputs.changed_directories }}, 'apps/three')
     steps:
       - uses: actions/checkout@v4
       - name: Call Reusable Workflow Three
