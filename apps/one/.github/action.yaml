@@ -1,11 +1,8 @@
 name: one
 
-on:
-  workflow_call:
-
-jobs:
-  one:
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo one workflow is ran
+runs:
+  using: composite
+  steps:
+    - name: a step
+      run: |
+        echo one action is ran
