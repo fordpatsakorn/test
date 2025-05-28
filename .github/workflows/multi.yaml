@@ -2,36 +2,6 @@ name: multi
 on:
   push
 
- Part of CI/CD Collective
-5
-
-I'm trying to create a GH Action workflow, that Zips the directory that is updated, and then pushes each Zip file to a Source, with different configuration flags (e.g. name flag will be different for each zip file).
-
-E.g. Let's say I have 4 directories.. dir1/ dir2/ dir3/ dir4/ If I update code in dir2 and dir4, then I want my GH Action to Zip up both of those, and perform an action where I'm pushing both directories to a source, as well as configuring different settings for both.
-
-An idea that I had for this is to trigger 2 runs of the GH Action, 1 run for dir2 where it is zipped, and pushed. And trigger a second run for dir4 to zip and push.
-This would use the [working-directory](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#defaultsrun) attribute to capture which directory needs to be zipped.
-
-I'm not sure how to trigger a run of the GitHub Action per directory updated. Any help on this would be greatly appreciated!
-
-Also open to other solutions on how to achieve what I'm looking for, where I'm able to zip and perform the rest of the workflow, for each directory that has been updated.
-
-    github-actionsbuilding-github-actions
-
-Share
-Improve this question
-Follow
-asked Dec 19, 2022 at 18:56
-fuzzi's user avatar
-fuzzi
-2,2971212 gold badges5858 silver badges9797 bronze badges
-Add a comment
-2 Answers
-Sorted by:
-6
-
-The @aknosis answer is a rock-solid foundation. However, it doesn't work as-is (the jobs part). Based on this file, I've provided a working solution:
-
 jobs:
   find-out-changes:
     runs-on: ubuntu-latest
@@ -65,4 +35,3 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: zip ${{ matrix.dir }} etc.
-
