@@ -35,7 +35,7 @@ jobs:
         # run: echo "dirs=${{ steps.changed-dir.outputs.all_changed_dir }}" >> "$GITHUB_OUTPUT"
 
   bump-version:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.get-changed-dir.outputs.dirs)}}
