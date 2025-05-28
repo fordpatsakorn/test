@@ -24,8 +24,7 @@ jobs:
       - name: 'Set output in the matrix format'
         id: set-output
         run: |
-          echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
-          echo ${steps.changed-files.outputs.all_changed_files}
+          echo "changed_directories={\"dir\":$(basename ${{ steps.changed-files.outputs.all_changed_files }})}" >> "$GITHUB_OUTPUT"
 
   do-stuff:
     runs-on: ubuntu-latest
