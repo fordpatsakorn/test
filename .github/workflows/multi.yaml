@@ -6,7 +6,7 @@ jobs:
   find-out-changes:
     runs-on: ubuntu-latest
     outputs:
-      workflows: ${{ steps.set-output.outputs.changed_directories }}  # The `dirs` doesn't exist in the outputs of changed-files@v35 action.
+      changed_directories: ${{ steps.set-output.outputs.changed_directories }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -14,62 +14,25 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v46.0.5
         with:
           dir_names: true
-          dir_names_max_depth: 2  # This is optional. If not provided, full subdirectories' paths will be provided. Use it if you need to trim the output. See docs for details: https://github.com/tj-actions/changed-files/tree/main#inputs.
-          json: false
+          dir_names_max_depth: 2
+          json: true
           quotepath: false
-          separator: ','
 
       - name: 'Set output in the matrix format'
         id: set-output
-        run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
+        run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 
-  test:
+  do-stuff:
     runs-on: ubuntu-latest
-    needs: find-out-changes
+    if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}
+    strategy:
+      matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
+    needs:
+      - find-out-changes
     steps:
-      - name: test
-        run: echo ${{ needs.find-out-changes.outputs.workflows }}
-        
-  call-workflow-one:
-    runs-on: ubuntu-latest
-    needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'apps/one')
-    steps:
-      - uses: actions/checkout@v4
-      - name: Call Reusable Workflow One
-        uses: ./.github/workflows/one
-
-  call-workflow-two:
-    runs-on: ubuntu-latest
-    needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/two')
-    steps:
-      - uses: actions/checkout@v4
-      - name: Call Reusable Workflow Two
-        uses: ./.github/workflows/two
-
-  call-workflow-three:
-    runs-on: ubuntu-latest
-    needs: find-out-changes
-    if: contains(${{ needs.find-out-changes.outputs.workflows }}, 'app/three')
-    steps:
-      - uses: actions/checkout@v4
-      - name: Call Reusable Workflow Three
-        uses: ./.github/workflows/three
-
-  # do-stuff:
-  #   runs-on: ubuntu-latest
-  #   if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
-  #   strategy:
-  #     matrix: 
-  #       dir: [one/one.yaml, two/two.yaml] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
-  #   needs:
-  #     - find-out-changes
-  #   steps:
-  #     - uses: jenseng/dynamic-uses@v1
-  #       with:
-  #         uses: ./github/workflows/${{ matrix.dir }}
-
+      - uses: jenseng/dynamic-uses@v1
+        with:
+          uses: ./${{ matrix.dir }}/.github
