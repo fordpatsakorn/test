@@ -1,18 +1,57 @@
 name: versioning
 
 on:
-  pull_request:
-    types:
-      - closed
+  push
+  # pull_request:
+  #   types:
+  #     - closed
 
 env:
  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
 
 jobs:
-  if_merged:
+  get-changed-dir:
+    runs-on: ubuntu-latest
+    outputs:
+      dirs: ${{ steps.set-output.outputs.dirs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed dir
+        id: changed-dir
+        uses: tj-actions/changed-files@v46.0.5
+        with:
+          dir_names: true
+          dir_names_max_depth: 2
+          json: true
+          quotepath: false
+          separator: ','
+
+      - name: 'Set output in the matrix format'
+        id: set-output
+        run: echo "dirs={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+        run: echo "dirs=${{ steps.changed-dir.outputs.all_changed_dir }}" >> "$GITHUB_OUTPUT"
+
+  bump-version:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.get-changed-dir.outputs.dirs)}}
+    needs:
+      - get-changed-dir
     steps:
     - run: |
-        echo The PR was merged
+        echo ${{ matrix.dir }}
         echo ${BRANCH_NAME}
+
+  # do-stuff:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix: ${{fromJson(needs.find-out-changes.outputs.dirs)}}
+  #   needs:
+  #     - get-changed-dir
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: zip ${{ matrix.dir }} etc.

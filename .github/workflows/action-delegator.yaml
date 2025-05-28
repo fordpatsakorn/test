@@ -1,4 +1,4 @@
-name: multi
+name: action-delegator
 on:
   push
 
