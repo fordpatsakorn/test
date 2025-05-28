@@ -8,7 +8,7 @@ jobs:
     outputs:
       changed_directories: ${{ steps.set-output.outputs.changed_directories }}  # The `dirs` doesn't exist in the outputs of changed-files@v35 action.
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -34,6 +34,7 @@ jobs:
     needs:
       - find-out-changes
     steps:
+      - uses: actions/checkout@v4
       - uses: jenseng/dynamic-uses@v1
         with:
           uses: ./github/workflows/${{ matrix.dir }}
