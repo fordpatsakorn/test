@@ -34,4 +34,6 @@ jobs:
     needs:
       - find-out-changes
     steps:
-      - uses: ./github/workflows/${{ matrix.dir }}
+      - uses: jenseng/dynamic-uses@v1
+        with:
+          uses: 
