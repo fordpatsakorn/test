@@ -20,6 +20,7 @@ jobs:
           dir_names_max_depth: 2
           json: true
           quotepath: false
+          path: './.github'
 
       - name: 'Set output in the matrix format'
         id: set-output
