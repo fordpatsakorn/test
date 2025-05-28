@@ -25,14 +25,8 @@ jobs:
         id: set-output
         run: |
           changed_dirs=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | jq -r '.[]')
-          output=""
-          for dir in $changed_dirs; do
-            base_name=$(basename "$dir")
-            output="$output{\"dir\": \"$dir\", \"basename\": \"$base_name\"},"
-          done
-          # Remove the trailing comma
-          output="[${output%,}]"
-          echo "changed_directories=$output" >> "$GITHUB_OUTPUT"
+          echo "$changed_dirs" | jq -ncR '[inputs | {dir: ., basename: (.|basename)}]' > changed_directories.json
+          echo "changed_directories=$(cat changed_directories.json)" >> "$GITHUB_OUTPUT"
 
   do-stuff:
     runs-on: ubuntu-latest
