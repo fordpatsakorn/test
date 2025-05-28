@@ -31,7 +31,8 @@ jobs:
     needs: find-out-changes
     steps:
       - name: Print Changed Directories
-        run: echo "Changed Directories: ${{ needs.find-out-changes.outputs.changed_directories }}"
+        run: |
+          echo "Changed Directories: ${{ needs.find-out-changes.outputs.changed_directories }}"
       
       - name: Output as List
         run: |
