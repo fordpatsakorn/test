@@ -25,7 +25,19 @@ jobs:
       - name: 'Set output in the matrix format'
         id: set-output
         run: echo "workflows=${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_OUTPUT"
-        
+
+  debug:
+    runs-on: ubuntu-latest
+    needs: find-out-changes
+    steps:
+      - name: Print Changed Directories
+        run: echo "Changed Directories: ${{ needs.find-out-changes.outputs.changed_directories }}"
+      
+      - name: Output as List
+        run: |
+          echo "Parsing the outputs as a JSON list:"
+          echo "${{ fromJson(needs.find-out-changes.outputs.changed_directories) }}"
+
   call-app-one:
     runs-on: ubuntu-latest
     needs: find-out-changes
