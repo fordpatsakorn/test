@@ -30,10 +30,11 @@ jobs:
     if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix: 
-        dir: ["one/one.yaml", "two/two.yaml"] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
+        dir: [one/one.yaml, two/two.yaml] #${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
     needs:
       - find-out-changes
     steps:
       - uses: jenseng/dynamic-uses@v1
         with:
-          uses: 
+          uses: ./github/workflows/${{ matrix.dir }}
+
