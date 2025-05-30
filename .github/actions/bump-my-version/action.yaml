@@ -63,6 +63,9 @@ runs:
         echo ${{ github.action_path }}
         version-type=$(bash ${{ github.action_path }}/get-commit-type.sh)
         echo "version-type=$version-type" >> $GITHUB_OUTPUT
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        ACTION_PATH: ${{ github.action_path }}
     - name: Install bump-my-version
       shell: bash
       run: pip install "bump-my-version==1.1.4"
