@@ -1,0 +1,5 @@
+{
+  "major": ["another-breaking-keyword"],
+  "minor": ["feat", "feature", "enhancement"],
+  "patch": ["fix", "bugfix"]
+}
