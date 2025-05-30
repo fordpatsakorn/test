@@ -58,7 +58,7 @@ runs:
       id: type
       shell: bash
       run: |
-        echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+        echo "GITHUB_TOKEN=${{ secrets.API_GITHUB }}" >> $GITHUB_ENV
         version-type=$(bash ./get-commit-type.sh)
         echo "version-type=$version-type" >> $GITHUB_OUTPUT
     - name: Install bump-my-version
