@@ -26,7 +26,7 @@ jobs:
 
       - name: Configure bot
         run: |
-          git config --local user.email "${{ secrets.BOT_USERNAME}}"
+          git config --local user.email "$BOT_USERNAME"
           git config --local user.name "botkuppp"
 
       - name: Bump version
