@@ -24,11 +24,6 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
-      - name: Configure bot
-        run: |
-          git config --local user.email "$BOT_USERNAME"
-          git config --local user.name "botkuppp"
-
       - name: Bump version
         id: bump
         uses: callowayproject/bump-my-version@master
