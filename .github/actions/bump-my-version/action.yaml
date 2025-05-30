@@ -41,12 +41,14 @@ runs:
       uses: actions/checkout@v4
       with:
         persist-credentials: false
-    - name: Prepare git
+        fetch-depth: 0
+        fetch-tags: true
+
+    - name: Setting up git config
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        git fetch --filter=tree:0 --depth=1 origin $TAG:$TAG
         git config --global user.email "${{ inputs.git-email }}"
         git config --global user.name "${{ inputs.git-username }}"
         git config -l
