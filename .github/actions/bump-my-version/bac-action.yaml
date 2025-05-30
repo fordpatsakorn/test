@@ -1,10 +1,10 @@
 name: Bump My Version
 description: Bump version of a project
 inputs:
-  bump-type:
-    description: 'SemVer version type to bump [major/minor/patch]'
-    required: true
-    default: 'auto'
+  args:
+    description: 'May contain any of the following: VERSION_PART (e.g. minor), FILES (additional file(s) to modify).'
+    required: false
+    default: ''
   github-token:
     description: 'GitHub Token to use instead of the default one.'
     required: false
@@ -13,14 +13,6 @@ inputs:
     description: 'Destination branch to push changes.'
     required: false
     default: ${{ github.ref }}
-  git-email:
-    description: 'Email of Git account to commit as'
-    required: false
-    default: ${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com
-  git-username:
-    description: 'Username of Git account to commit as'
-    required: false
-    default: $(gh api /users/${GITHUB_ACTOR} | jq .name -r)
 outputs:
   bumped:
     description: 'Whether there was a bump or not [true|false]'
@@ -31,9 +23,6 @@ outputs:
   current-version:
     description: 'Updated version'
     value: ${{ steps.bump.outputs.current-version }}
-  version-type:
-    description: 'SemVer version type [major/minor/patch]'
-    value: ${{ steps.type.outputs.version-type}}
 runs:
   using: 'composite'
   steps:
@@ -46,21 +35,14 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        git config --global user.email "${{ inputs.git-email }}"
-        git config --global user.name "${{ inputs.git-username }}"
+        git config --global user.email "patsakorn_b+bot@flowaccount.com"
+        git config --global user.name "botkuppp"
         git config -l
     - name: Install Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
         cache: 'pip'
-    - name: Get SemVer version type
-      id: type
-      shell: bash
-      run: |
-        echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-        version-type=$(bash ./get-commit-type.sh)
-        echo "version-type=$version-type" >> $GITHUB_OUTPUT
     - name: Install bump-my-version
       shell: bash
       run: pip install "bump-my-version==1.1.4"
@@ -69,11 +51,8 @@ runs:
       shell: bash
       run: |
         echo "previous-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
-        if [[ "${{ inputs.bump-type }}" == "auto" ]]; then
-          bump-my-version bump ${{ steps.type.outputs.version-type}}
-        else
-          bump-my-version bump ${{ inputs.bump-type }}
-        fi
+
+        bump-my-version bump ${{ inputs.args }}
         ([[ $? -gt 0 ]] && echo "bumped=false" || echo "bumped=true") >> $GITHUB_OUTPUT
         echo "current-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
     - name: Push changes to GitHub
