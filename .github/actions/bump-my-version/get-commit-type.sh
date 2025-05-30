@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-GITHUB_TOKEN="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"
 OWNER="flowaccount"
 REPO="flowaccount.dotnet.workspace"
 declare -A type_priority
