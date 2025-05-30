@@ -4,7 +4,7 @@ GITHUB_TOKEN="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"
 OWNER="flowaccount"
 REPO="flowaccount.dotnet.workspace"
 declare -A type_priority
-json_file="./priority.json"
+json_file="$ACTION_PATH/priority.json"
 if [[ ! -f "$json_file" ]]; then
   echo "Priority config not found: $json_file"
   exit 1

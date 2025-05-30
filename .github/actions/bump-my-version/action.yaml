@@ -59,6 +59,7 @@ runs:
       shell: bash
       run: |
         echo "GITHUB_TOKEN=${{ inputs.github-token }}" >> $GITHUB_ENV
+        echo "ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
         version-type=$(bash ${{ github.action_path }}/get-commit-type.sh)
         echo "version-type=$version-type" >> $GITHUB_OUTPUT
     - name: Install bump-my-version
