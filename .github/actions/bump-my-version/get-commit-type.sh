@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-OWNER="flowaccount"
-REPO="flowaccount.dotnet.workspace"
 
 declare -A type_priority
 json_file="$ACTION_PATH/priority.json"
@@ -33,7 +31,7 @@ do
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    "https://api.github.com/repos/$OWNER/$REPO/commits/$commit/pulls")
+    "https://api.github.com/repos/fordpatsakorn/test-auto-versioning/commits/$commit/pulls")
   echo $response
   ref=$(echo "$response" | jq -r '.[0].head.ref // empty')
   if [ -n "$ref" ]; then
