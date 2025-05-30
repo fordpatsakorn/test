@@ -29,7 +29,7 @@ jobs:
         id: bump
         uses: ./.github/actions/bump-my-version
         with:
-          args: ${{ inputs.bump-type }}
+          bump-type: ${{ inputs.bump-type }}
           github-token: ${{ secrets.BOT_API_KEY }}
 
       - name: Check
