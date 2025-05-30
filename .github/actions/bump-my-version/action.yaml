@@ -41,6 +41,7 @@ runs:
       uses: actions/checkout@v4
       with:
         persist-credentials: false
+        fetch-depth: 1
         fetch-tags: true
 
     - name: Setting up git config
