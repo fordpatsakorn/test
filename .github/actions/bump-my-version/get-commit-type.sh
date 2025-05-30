@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-API_GITHUB="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"
+GITHUB_TOKEN="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"
 OWNER="flowaccount"
 REPO="flowaccount.dotnet.workspace"
 declare -A type_priority
@@ -31,7 +31,7 @@ for commit in $(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:
 do
   response=$(curl -sL \
     -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $API_GITHUB" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "https://api.github.com/repos/$OWNER/$REPO/commits/$commit/pulls")
 
