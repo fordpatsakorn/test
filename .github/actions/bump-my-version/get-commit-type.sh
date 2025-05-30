@@ -37,6 +37,7 @@ do
 
   ref=$(echo "$response" | jq -r '.[0].head.ref // empty')
 
+  echo ref
   if [ -n "$ref" ]; then
     # Extract the commit type (before the first '/')
     commit_type=$(echo "$ref" | awk -F'/' '{print $1}')
