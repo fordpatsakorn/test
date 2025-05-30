@@ -32,7 +32,6 @@ do
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "https://api.github.com/repos/fordpatsakorn/test-auto-versioning/commits/$commit/pulls")
-  echo $response
   ref=$(echo "$response" | jq -r '.[0].head.ref // empty')
   if [ -n "$ref" ]; then
     # Extract the commit type (before the first '/')
