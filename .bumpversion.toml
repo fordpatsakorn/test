@@ -16,9 +16,6 @@ commit = true
 message = "Bump version: {current_version} → {new_version}"
 moveable_tags = []
 commit_args = ""
-setup_hooks = [
-    "git config --global user.email \"patsakorn_b+bot@flowaccount.com\"",
-    "git config --global user.name \"botkuppp\"",
-]
+setup_hooks = []
 pre_commit_hooks = []
 post_commit_hooks = []
