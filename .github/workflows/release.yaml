@@ -5,13 +5,14 @@ on:
     inputs:
       bump-type:
         description: 'Bump type'
-        required: true
+        required: false
         default: 'minor'
         type: choice
         options:
           - major
           - minor
           - patch
+          - auto
           
 permissions:
   contents: write
