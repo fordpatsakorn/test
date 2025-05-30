@@ -29,7 +29,6 @@ highest_priority=0
 
 for commit in $(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%H");
 do
-echo $commit
   response=$(curl -sL \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -37,7 +36,6 @@ echo $commit
     "https://api.github.com/repos/$OWNER/$REPO/commits/$commit/pulls")
 
   ref=$(echo "$response" | jq -r '.[0].head.ref // empty')
-  echo $ref
   if [ -n "$ref" ]; then
     # Extract the commit type (before the first '/')
     commit_type=$(echo "$ref" | awk -F'/' '{print $1}')
