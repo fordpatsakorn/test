@@ -2,7 +2,6 @@
 
 OWNER="flowaccount"
 REPO="flowaccount.dotnet.workspace"
-echo "$ACTION_PATH/priority.json"
 declare -A type_priority
 json_file="$ACTION_PATH/priority.json"
 if [[ ! -f "$json_file" ]]; then
