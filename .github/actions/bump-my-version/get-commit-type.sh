@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+OWNER="flowaccount"
+REPO="flowaccount.dotnet.workspace"
 declare -A type_priority
 json_file="./priority.json"
 if [[ ! -f "$json_file" ]]; then
