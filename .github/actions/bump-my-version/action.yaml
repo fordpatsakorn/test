@@ -52,6 +52,7 @@ runs:
         git config --global user.email "${{ inputs.git-email }}"
         git config --global user.name "${{ inputs.git-username }}"
         git config -l
+        touch ${{ github.workspace }}/requirements.txt
     - name: Install Python
       uses: actions/setup-python@v5
       with:
