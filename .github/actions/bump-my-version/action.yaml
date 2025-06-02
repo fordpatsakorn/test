@@ -63,6 +63,8 @@ runs:
       run: |
         cd ${{ github.action_path }}
         pip install -r requirements.txt
+        echo "GITHUB_TOKEN=${{ inputs.github-token }}" >> $GITHUB_ENV
+        echo "ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
         python script.py
     - name: Get SemVer version type
       id: type

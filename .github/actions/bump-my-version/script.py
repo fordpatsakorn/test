@@ -8,7 +8,7 @@ def load_config(json_path):
     if not os.path.exists(json_path):
         print(f"Config not found: {json_path}")
         exit(1)
-    with open(json_path, 'r') as f:
+    with open(json_path, "r") as f:
         return json.load(f)
     
 def get_latest_matching_tag(repo, tag_format):
@@ -41,23 +41,23 @@ def determine_highest_priority(repo, config, github_token, latest_tag):
         for keyword in keywords:
             type_priority[keyword] = priority_index[level]
     highest_priority = -1
-    commits = list(repo.iter_commits(f'{latest_tag}..HEAD'))
+    commits = list(repo.iter_commits(f"{latest_tag}..HEAD"))
     for commit in commits:
         commit_hash = commit.hexsha
         try:
             response = requests.get(
-                f'https://api.github.com/repos/fordpatsakorn/test-auto-versioning/commits/{commit_hash}/pulls',
+                f"https://api.github.com/repos/fordpatsakorn/test-auto-versioning/commits/{commit_hash}/pulls",
                 headers= {
-                    'Accept': 'application/vnd.github+json',
-                    'Authorization': f'Bearer {github_token}',
-                    'X-GitHub-Api-Version': '2022-11-28'
+                    "Accept": "application/vnd.github+json",
+                    "Authorization": f"Bearer {github_token}",
+                    "X-GitHub-Api-Version": "2022-11-28"
                 }
             )
             response.raise_for_status()
             pulls = response.json()
             if pulls:
-                ref = pulls[0]['head']['ref'] # head.ref is the branch associated with the PR
-                commit_type = ref.split('/')[0]
+                ref = pulls[0]["head"]["ref"] # head.ref is the branch associated with the PR
+                commit_type = ref.split("/")[0]
                 priority = type_priority.get(commit_type)
                 if priority is not None and priority > highest_priority:
                     highest_priority = priority
@@ -87,13 +87,13 @@ def increment_version(latest_tag, version_type, tag_format):
     return None
 
 def main():
-    action_path = os.getenv('ACTION_PATH')
-    github_token = "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"
+    action_path = os.getenv("ACTION_PATH")
+    github_token = os.getenv("GITHUB_TOKEN")
 
-    json_file = os.path.join(action_path, 'config.json')
+    json_file = os.path.join(action_path, "config.json")
     config = load_config(json_file)
         
-    repo = Repo('../../../')
+    repo = Repo("../../../")
     latest_tag = get_latest_matching_tag(repo,config.get("tag_format"))
     highest_priority = determine_highest_priority(repo, config.get("keyword"), github_token, latest_tag)
     new_version = increment_version(latest_tag, highest_priority, config.get("tag_format"))
