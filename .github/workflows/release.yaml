@@ -35,7 +35,7 @@ jobs:
         uses: ./.github/actions/versioning
         with:
           version-type: ${{ inputs.version-type }}
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.BOT_API_KEY }}
       - name: Check
         shell: bash
         run: |
