@@ -1,0 +1,8 @@
+{
+  "keyword": {
+    "major": ["breaking"],
+    "minor": ["feat", "feature", "enhancement"],
+    "patch": ["fix", "bugfix"]
+  },
+  "tag_format": "release/{major}.{minor}.{patch}"
+}
