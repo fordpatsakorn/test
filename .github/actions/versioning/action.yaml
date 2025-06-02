@@ -1,5 +1,9 @@
 name: Versioning
 inputs:
+  version-type:
+    description: 'Type of version to increment'
+    required: true
+    default: 'auto'
   github-token:
     description: 'GitHub Token to use instead of the default one.'
     required: false
@@ -37,6 +41,7 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
+        VERSION_TYPE: ${{ inputs.version-type }}
         ACTION_PATH: ${{ github.action_path }}
       run: |
         cd ${{ github.action_path }}
