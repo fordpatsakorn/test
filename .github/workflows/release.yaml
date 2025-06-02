@@ -23,7 +23,7 @@ permissions:
   contents: write
 
 jobs:
-  bump_and_release:
+  versioning_and_release:
     runs-on: ubuntu-latest
     
     steps:
