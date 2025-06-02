@@ -46,7 +46,7 @@ jobs:
             echo "Releasing ${{ steps.versioning.outputs.next-version }}"
           fi
       - name: Release
-        if: ${{ !inputs.trial_run }}
+        if: ${{ !inputs.is-test-run }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "${{ steps.versioning.outputs.next-version }}"
