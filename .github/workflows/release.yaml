@@ -29,7 +29,7 @@ jobs:
         id: versioning
         uses: ./.github/actions/versioning
         with:
-          bump-type: ${{ inputs.bump-type }}
+          version-type: ${{ inputs.bump-type }}
           github-token: ${{ secrets.BOT_API_KEY }}
       - name: Release
         uses: softprops/action-gh-release@v2
