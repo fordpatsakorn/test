@@ -1,0 +1,44 @@
+name: Versioning
+inputs:
+  github-token:
+    description: 'GitHub Token to use instead of the default one.'
+    required: false
+    default: ${{ github.token }}
+outputs:
+  next-version:
+    description: 'Next version in the provided format in config.json'
+    value: ${{ steps.next-version.outputs.version}}
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout the code
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+        fetch-tags: true
+
+    - name: Setting up git config
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        git config --global user.email "${{ inputs.git-email }}"
+        git config --global user.name "${{ inputs.git-username }}"
+        git config -l
+        touch ${{ github.workspace }}/requirements.txt
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+    - name: Get next version
+      id: next-version
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        cd ${{ github.action_path }}
+        pip install -r requirements.txt
+        echo version=$(python script.py) >> $GITHUB_OUTPUT

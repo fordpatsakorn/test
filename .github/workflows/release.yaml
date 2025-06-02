@@ -3,8 +3,8 @@ name: Manual Release
 on:
   workflow_dispatch:
     inputs:
-      bump-type:
-        description: 'Bump type'
+      version-type:
+        description: 'Version type'
         required: true
         default: 'auto'
         type: choice
@@ -25,15 +25,15 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
-      - name: Bump version
-        id: bump
-        uses: ./.github/actions/bump-my-version
+      - name: Versioning
+        id: versioning
+        uses: ./.github/actions/versioning
         with:
           bump-type: ${{ inputs.bump-type }}
           github-token: ${{ secrets.BOT_API_KEY }}
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ steps.bump.outputs.next-version }}"
+          tag_name: "${{ steps.versioning.outputs.next-version }}"
           generate_release_notes: true
           make_latest: true
