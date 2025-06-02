@@ -31,6 +31,15 @@ jobs:
         with:
           version-type: ${{ inputs.bump-type }}
           github-token: ${{ secrets.BOT_API_KEY }}
+      - name: Check
+        shell: bash
+        run: |
+          if [[ "${{ steps.versioning.outputs.next-version }}" == "none" ]]; then
+            echo "Nothing to release"
+            exit 1
+          else
+            echo "Releasing ${{ steps.versioning.outputs.next-version }}"
+          fi
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
