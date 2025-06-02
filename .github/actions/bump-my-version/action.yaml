@@ -70,6 +70,27 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         ACTION_PATH: ${{ github.action_path }}
+    - name: Get version
+      id: 
+      shell: bash
+      run: |
+        release=$(echo ${{ github.ref }} | sed 's|^refs/tags/||')
+        if [[ $release == release/* ]]; then
+          new_version=$(echo 'release/3.1.2' | cut -d'/' -f2)
+          echo $new_version
+        else
+          exit 1
+        fi
+
+        old_version=$(cat ${{ github.workspace }}/version)
+        if dpkg --compare-versions $new_version gt $old_version; then
+          echo yes
+          echo $new_version > version
+        else
+          echo no
+          exit 1
+        fi
+
     - name: Install bump-my-version
       shell: bash
       run: pip install "bump-my-version==1.1.4"
