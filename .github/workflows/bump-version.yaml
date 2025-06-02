@@ -7,7 +7,11 @@ on:
 jobs:
   bump-version:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
       - name: "Bump version"
         run: |
           release=$(echo ${{ github.ref }} | sed 's|^refs/tags/||')
@@ -26,3 +30,16 @@ jobs:
             echo no
             exit 1
           fi
+
+      - name: "Commit version change"
+        if: ${{ success() }}
+        run: |
+          git add version
+          git commit -m "Bump version to $new_version"
+
+      - name: "Push changes"
+        if: ${{ success() }}
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
