@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version-type:
-        description: "Determines the version to increment: 'major', 'minor', 'patch', or 'auto' for auto-detection. The format is '{major}.{minor}.{patch}'"
+        description: "Determines the version type to increment, choose 'auto' for auto-detection. The format is '{major}.{minor}.{patch}'"
         required: true
         default: 'auto'
         type: choice
@@ -14,7 +14,7 @@ on:
           - patch
           - auto
       is-test-run:
-        description: "Indicates whether this is a test run. Set to 'true' for a test (dry run) without making actual releases."
+        description: "Check to perform a test run without making actual releases."
         required: true
         default: true
         type: boolean
