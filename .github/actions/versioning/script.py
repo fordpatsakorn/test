@@ -90,7 +90,7 @@ def main():
     action_path = os.getenv("ACTION_PATH")
     github_token = os.getenv("GITHUB_TOKEN")
     version_type = os.getenv("VERSION_TYPE")
-    print(version_type)
+
     json_file = os.path.join(action_path, "config.json")
     config = load_config(json_file)
         
