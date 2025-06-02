@@ -89,13 +89,17 @@ def increment_version(latest_tag, version_type, tag_format):
 def main():
     action_path = os.getenv("ACTION_PATH")
     github_token = os.getenv("GITHUB_TOKEN")
+    version_type = os.getenv("VERSION_TYPE")
 
     json_file = os.path.join(action_path, "config.json")
     config = load_config(json_file)
         
     repo = Repo("../../../")
     latest_tag = get_latest_matching_tag(repo,config.get("tag_format"))
-    highest_priority = determine_highest_priority(repo, config.get("keyword"), github_token, latest_tag)
+    if (version_type == "auto"):
+        highest_priority = determine_highest_priority(repo, config.get("keyword"), github_token, latest_tag)
+    else:
+        highest_priority = {"patch": 0, "minor": 1, "major": 2}.get(version_type, -1)
     new_version = increment_version(latest_tag, highest_priority, config.get("tag_format"))
     
     if highest_priority > -1:
