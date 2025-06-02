@@ -2,11 +2,11 @@ name: Bump Version
 
 on:
   release:
-    type: [published]
+    types: [published]
 
 jobs:
   bump-version:
     runs-on: ubuntu-latest
     steps:
-      - name: bump-version
+      - name: "Bump version"
         run: echo ${{ github.ref }}
