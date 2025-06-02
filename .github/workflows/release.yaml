@@ -5,7 +5,7 @@ on:
     inputs:
       bump-type:
         description: 'Bump type'
-        required: false
+        required: true
         default: 'auto'
         type: choice
         options:
