@@ -13,7 +13,12 @@ on:
           - minor
           - patch
           - auto
-          
+      trial-run:
+        description: 'Simulate the script without releasing'
+        required: true
+        default: true
+        type: boolean
+
 permissions:
   contents: write
 
@@ -41,6 +46,7 @@ jobs:
             echo "Releasing ${{ steps.versioning.outputs.next-version }}"
           fi
       - name: Release
+        if: ${{ !inputs.trial_run }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "${{ steps.versioning.outputs.next-version }}"
