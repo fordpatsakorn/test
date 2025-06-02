@@ -56,8 +56,13 @@ runs:
     - name: Install Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
         cache: 'pip'
+    - name: Get next version
+      shell: bash
+      run: |
+        ls
+        pip install -r requirements.txt
     - name: Get SemVer version type
       id: type
       shell: bash
