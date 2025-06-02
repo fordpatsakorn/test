@@ -31,7 +31,9 @@ jobs:
         with:
           bump-type: ${{ inputs.bump-type }}
           github-token: ${{ secrets.BOT_API_KEY }}
-
+      - name: test
+        run: |
+          echo ${{ steps.bump.outputs.next-version }}
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
         run: |

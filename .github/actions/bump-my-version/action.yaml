@@ -34,6 +34,9 @@ outputs:
   version-type:
     description: 'SemVer version type [major/minor/patch]'
     value: ${{ steps.type.outputs.version-type}}
+  next-version:
+    description: 'Next version in the provided format'
+    value: ${{ steps.next-version.outputs.version}}
 runs:
   using: 'composite'
   steps:
@@ -59,6 +62,7 @@ runs:
         python-version: '3.13'
         cache: 'pip'
     - name: Get next version
+      id: next-version
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -66,57 +70,57 @@ runs:
       run: |
         cd ${{ github.action_path }}
         pip install -r requirements.txt
-        python script.py
-    - name: Get SemVer version type
-      id: type
-      shell: bash
-      run: |
-        echo "GITHUB_TOKEN=${{ inputs.github-token }}" >> $GITHUB_ENV
-        echo "ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
-        echo ${{ github.action_path }}
-        bash ${{ github.action_path }}/get-commit-type.sh
-        echo "version-type=$(bash ${{ github.action_path }}/get-commit-type.sh)" >> $GITHUB_OUTPUT
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-        ACTION_PATH: ${{ github.action_path }}
-    - name: Get version
-      shell: bash
-      run: |
-        release=$(echo ${{ github.ref }} | sed 's|^refs/tags/||')
-        if [[ $release == release/* ]]; then
-          new_version=$(echo 'release/3.1.2' | cut -d'/' -f2)
-          echo $new_version
-        else
-          exit 1
-        fi
+        echo version=$(python script.py) >> $GITHUB_OUTPUT
+    # - name: Get SemVer version type
+    #   id: type
+    #   shell: bash
+    #   run: |
+    #     echo "GITHUB_TOKEN=${{ inputs.github-token }}" >> $GITHUB_ENV
+    #     echo "ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
+    #     echo ${{ github.action_path }}
+    #     bash ${{ github.action_path }}/get-commit-type.sh
+    #     echo "version-type=$(bash ${{ github.action_path }}/get-commit-type.sh)" >> $GITHUB_OUTPUT
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.github-token }}
+    #     ACTION_PATH: ${{ github.action_path }}
+    # - name: Get version
+    #   shell: bash
+    #   run: |
+    #     release=$(echo ${{ github.ref }} | sed 's|^refs/tags/||')
+    #     if [[ $release == release/* ]]; then
+    #       new_version=$(echo 'release/3.1.2' | cut -d'/' -f2)
+    #       echo $new_version
+    #     else
+    #       exit 1
+    #     fi
 
-        old_version=$(cat ${{ github.workspace }}/version)
-        if dpkg --compare-versions $new_version gt $old_version; then
-          echo yes
-          echo $new_version > version
-        else
-          echo no
-          exit 1
-        fi
+    #     old_version=$(cat ${{ github.workspace }}/version)
+    #     if dpkg --compare-versions $new_version gt $old_version; then
+    #       echo yes
+    #       echo $new_version > version
+    #     else
+    #       echo no
+    #       exit 1
+    #     fi
 
-    - name: Install bump-my-version
-      shell: bash
-      run: pip install "bump-my-version==1.1.4"
-    - name: Pass Inputs to Shell
-      id: bump
-      shell: bash
-      run: |
-        echo "previous-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
-        if [[ "${{ inputs.bump-type }}" == "auto" ]]; then
-          bump-my-version bump ${{ steps.type.outputs.version-type}}
-        else
-          bump-my-version bump ${{ inputs.bump-type }}
-        fi
-        ([[ $? -gt 0 ]] && echo "bumped=false" || echo "bumped=true") >> $GITHUB_OUTPUT
-        echo "current-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
-    - name: Push changes to GitHub
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ inputs.github-token }}
-        branch: ${{ inputs.branch }}
-        force: true
+    # - name: Install bump-my-version
+    #   shell: bash
+    #   run: pip install "bump-my-version==1.1.4"
+    # - name: Pass Inputs to Shell
+    #   id: bump
+    #   shell: bash
+    #   run: |
+    #     echo "previous-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
+    #     if [[ "${{ inputs.bump-type }}" == "auto" ]]; then
+    #       bump-my-version bump ${{ steps.type.outputs.version-type}}
+    #     else
+    #       bump-my-version bump ${{ inputs.bump-type }}
+    #     fi
+    #     ([[ $? -gt 0 ]] && echo "bumped=false" || echo "bumped=true") >> $GITHUB_OUTPUT
+    #     echo "current-version=$(bump-my-version show current_version)" >> $GITHUB_OUTPUT
+    # - name: Push changes to GitHub
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     github_token: ${{ inputs.github-token }}
+    #     branch: ${{ inputs.branch }}
+    #     force: true
