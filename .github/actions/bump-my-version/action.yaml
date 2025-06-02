@@ -76,7 +76,6 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         ACTION_PATH: ${{ github.action_path }}
     - name: Get version
-      id: 
       shell: bash
       run: |
         release=$(echo ${{ github.ref }} | sed 's|^refs/tags/||')
