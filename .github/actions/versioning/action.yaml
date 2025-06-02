@@ -25,10 +25,10 @@ runs:
     - name: Setting up git config
       shell: bash
       env:
-        GH_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
-        git config --global user.email "${{ inputs.git-email }}"
-        git config --global user.name "${{ inputs.git-username }}"
+        git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+        git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
         git config -l
         touch ${{ github.workspace }}/requirements.txt
     - name: Install Python
