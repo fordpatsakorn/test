@@ -23,7 +23,7 @@ for level in "${!priority_index[@]}"; do
   done
 done
 
-highest_priority=0
+highest_priority=-1
 
 for commit in $(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%H");
 do
@@ -46,7 +46,7 @@ do
   fi
 done
 
-if (( highest_priority > 0 )); then
+if (( highest_priority > -1 )); then
   echo "${priority_labels[highest_priority]}"
 else
   echo "none"
