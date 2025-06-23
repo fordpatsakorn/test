@@ -32,10 +32,7 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
-app.MapGet("healthcheck", () =>
-    {
-        return "Healthy";
-    });
+
 
 app.Run();
 
