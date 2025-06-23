@@ -32,7 +32,7 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
-
+app.MapGet("/iseven/{number:int}", IsEvenCsharp.IsEven);
 
 app.Run();
 
