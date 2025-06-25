@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "GTX90fl8diY=",
+  "dgSpecHash": "34yyWeFCVn0=",
   "success": true,
   "projectFilePath": "/Users/ford/flow/repo/test/test-app/test-app/test-app.csproj",
   "expectedPackageFiles": [
     "/Users/ford/.nuget/packages/microsoft.aspnetcore.openapi/9.0.4/microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
-    "/Users/ford/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+    "/Users/ford/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/Users/ford/.nuget/packages/nunit/4.3.2/nunit.4.3.2.nupkg.sha512"
   ],
   "logs": []
 }

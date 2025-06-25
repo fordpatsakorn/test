@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ford/flow/repo/test/test-app/test-app/test-app.csproj": {}
+    "/Users/ford/flow/repo/test/AlwaysFailNUnitTest/AlwaysFailNUnitTest.csproj": {}
   },
   "projects": {
-    "/Users/ford/flow/repo/test/test-app/test-app/test-app.csproj": {
+    "/Users/ford/flow/repo/test/AlwaysFailNUnitTest/AlwaysFailNUnitTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ford/flow/repo/test/test-app/test-app/test-app.csproj",
-        "projectName": "test-app",
-        "projectPath": "/Users/ford/flow/repo/test/test-app/test-app/test-app.csproj",
+        "projectUniqueName": "/Users/ford/flow/repo/test/AlwaysFailNUnitTest/AlwaysFailNUnitTest.csproj",
+        "projectName": "AlwaysFailNUnitTest",
+        "projectPath": "/Users/ford/flow/repo/test/AlwaysFailNUnitTest/AlwaysFailNUnitTest.csproj",
         "packagesPath": "/Users/ford/.nuget/packages/",
-        "outputPath": "/Users/ford/flow/repo/test/test-app/test-app/obj/",
+        "outputPath": "/Users/ford/flow/repo/test/AlwaysFailNUnitTest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ford/.nuget/NuGet/NuGet.Config"
@@ -44,13 +44,25 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
+            "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[9.0.4, )"
+              "version": "[17.12.0, )"
             },
             "NUnit": {
               "target": "Package",
-              "version": "[4.3.2, )"
+              "version": "[4.2.2, )"
+            },
+            "NUnit.Analyzers": {
+              "target": "Package",
+              "version": "[4.4.0, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.6.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.2, )"
             }
           },
           "imports": [
@@ -65,9 +77,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
