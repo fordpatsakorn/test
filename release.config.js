@@ -1,5 +1,5 @@
 module.exports = {
-  branches: ['canary'],
+  branches: ['main'],
   tagFormat: 'release/${version}',
   plugins: [
     '@semantic-release/commit-analyzer',
