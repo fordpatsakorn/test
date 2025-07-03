@@ -1,0 +1,28 @@
+name: Semantic Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      is-test-run:
+        description: "Check this box to perform a test run without making actual releases."
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4.2.1
+        with:
+          dry_run: ${{ inputs.is-test-run }}
+          extra_plugins: |
+            semantic-release-jira-notes
+            conventional-changelog-conventionalcommits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
