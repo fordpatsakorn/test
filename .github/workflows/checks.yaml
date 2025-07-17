@@ -33,7 +33,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 name: "Example Check Run",
-                head_sha: context.sha,
+                head_sha: '${{ github.event.pull_request.head.sha }}',
                 status: "completed",
                 conclusion: "failure",
                 output: {
