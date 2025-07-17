@@ -1,7 +1,7 @@
 name: Create Check Run
 
 on:
-  push:
+  pull-requests:
     branches:
       - main
 
