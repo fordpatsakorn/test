@@ -1,7 +1,7 @@
 name: Create Check Run
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -33,9 +33,9 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 name: "Example Check Run",
-                head_sha: context.sha,
+                head_sha: '${{ github.event.pull_request.head.sha }}',
                 status: "completed",
-                conclusion: "neutral",
+                conclusion: "failure",
                 output: {
                   title: "Example Check Run Output",
                   summary: "This is the summary of the check.",
