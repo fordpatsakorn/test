@@ -1,0 +1,51 @@
+name: Create Check Run
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  create-check:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Check Run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { context } = require('@actions/github');
+            const annotations = [
+              {
+                path: "README.md",
+                start_line: 1,
+                end_line: 1,
+                annotation_level: "warning",
+                message: "This is a check example message",
+                title: "Example Annotation"
+              }
+            ];
+
+            try {
+              const check = await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: "Example Check Run",
+                head_sha: context.sha,
+                status: "completed",
+                conclusion: "neutral",
+                output: {
+                  title: "Example Check Run Output",
+                  summary: "This is the summary of the check.",
+                  text: "This provides additional text explaining what the check run did.",
+                  annotations: annotations
+                }
+              });
+              console.log(check);
+              console.log("Check created successfully:", check.data);
+            } catch (error) {
+              console.error("Error creating check:", error);
+            }
