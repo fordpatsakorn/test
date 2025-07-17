@@ -35,7 +35,7 @@ jobs:
                 name: "Example Check Run",
                 head_sha: context.sha,
                 status: "completed",
-                conclusion: "neutral",
+                conclusion: "failure",
                 output: {
                   title: "Example Check Run Output",
                   summary: "This is the summary of the check.",
