@@ -13,38 +13,164 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Check Run
+      - name: Extract warning and post comment
         uses: actions/github-script@v7
         with:
           script: |
-            const annotations = [
-              {
-                path: "README.md",
-                start_line: 1,
-                end_line: 1,
-                annotation_level: "warning",
-                message: "This is a check example message",
-                title: "Example Annotation"
-              }
+            const fs = require('fs');
+            const path = require('path');
+            const logContent = fs.readFileSync('build.log', "utf-8");
+            async function getChangedFiles() {
+              // Run git diff to get the list of changed files (no diff)
+              let changedFilesOutput = '';
+              await exec.exec('git', ['diff', '--name-only', 'origin/canary...HEAD'], {
+                silent: true,
+                listeners: {
+                  stdout: (data) => {
+                    changedFilesOutput += data.toString();
+                  }
+                }
+              });
+              console.log('changedFilesOutput: ' + changedFilesOutput);
+              return changedFilesOutput.trim().split('\\n').filter(Boolean);
+            }
+            async function getLineChanges(file) {
+              // Run git diff to get detailed information for each file
+              console.log('file' + file);
+              let fileDiff = '';
+              await exec.exec('git', ['diff', '--unified=0', '--diff-filter=AM', 'origin/canary...HEAD', '--', file], {
+                silent: false,
+                listeners: {
+                  stdout: (data) => {
+                    fileDiff += data.toString();
+                  }
+                }
+              });
+              const diffLines = fileDiff.trim().split('\\n');
+              const lineChanges = [];
+              console.log('fileDiff: ' + fileDiff);
+              diffLines.forEach(line => {
+                // Match line changes info hunk (Ex. @@ -0,1 +0,1 @@) Read what is means here: https://unix.stackexchange.com/questions/81998/understanding-of-diff-output
+                const hunkMatch = line.match(/^@@ -[0-9]+(?:,[0-9]+)? \\+([0-9]+)(?:,([0-9]+))? @@/);
+                if (hunkMatch) {
+                  const startLine = parseInt(hunkMatch[1], 10);
+                  const numLines = hunkMatch[2] ? parseInt(hunkMatch[2]) : 1; // Number of lines changed
+                  lineChanges.push([startLine, startLine + numLines - 1]);
+                }
+              });
+              console.log('lineChanges' + lineChanges);
+              return lineChanges;
+            }
+            // Map changed files with line changes
+            // Return an object with schema: [{"name":"filename","lines":[[1,1],[12,14]]}]
+            async function getChangedFileLineData() {
+              const changedFiles = await getChangedFiles();
+              console.log('changedFile: ' + changedFiles);
+              return changedFiles.map(async file => ({
+                name: file,
+                lines: await getLineChanges(file)
+              }));
+            }
+            const changedFileLineData = await getChangedFileLineData();
+            console.log(JSON.stringify(changedFileLineData, null, 2));
+            // Map patterns object
+            const rulePatterns = {
+              Warning: { ids: ['FAWRN\\d+'], type: 'Warning' },
+              Information: { ids: ['CS0612'], type: 'Information' },
+              Error: { ids: [], type: 'Error' }
+            };
+            const patterns = Object.values(rulePatterns).map(({ ids, type }) => ({
+              pattern: new RegExp(
+                `^(?:Warning: |Error: )?(.+\\.cs)\\((\\d+),(\\d+)\\): (?:warning|error|information) (${ids.join('|')}): (.+?)(?: \\((https?:\\/\\/[^)]+)\\))?(?: \\[.+\\])?$`
+              ),
+              type: type
+            }));
+            const lines = [
+              "## Code Analyzer Warning",
+              "| **File** | **Code** | **Type** | **Description** | **More Info** |",
+              "|--|--|--|--|--|"
             ];
-
-            try {
-              const check = await github.rest.checks.create({
+            let foundWarning = false;
+            let foundMatch = false;
+            const seen = new Set();
+            const annotations = [];
+            
+            function processMatch(match, type, lineData) {
+              if (type === 'Warning' || type === 'Error') {foundWarning = true;}
+              const [_, file, lineNum, col, code, desc, link] = match;
+              const resolved = path.resolve(file);
+              const relative = path.relative(path.resolve(process.cwd()), resolved);
+              let isLineChanged = false;
+              const fileEntry = lineData.find(entry => entry.name === relative);
+              if (fileEntry) { // If have file, check if there are any changes
+                isLineChanged = fileEntry.lines.some(([start, end]) => lineNum >= start && lineNum <= end);
+                if (!isLineChanged) { return; }
+              } else { return; }
+              const dedupKey = `${resolved}:${lineNum}:${col}:${code}`;
+              if (seen.has(dedupKey)) return; // Skip duplicates
+              seen.add(dedupKey);
+              const escapedDesc = desc.replace(/\|/g, "\\|");
+              lines.push(`| ${relative} (${lineNum},${col}) | ${code} | ${type} | ${escapedDesc} | ${link ?? '-'} |`);
+              const annotationLevel =
+                type === 'Warning' ? 'warning' :
+                  type === 'Information' ? 'notice' :
+                    type === 'Error' ? 'failure' : 'notice';
+              annotations.push({
+                path: relative,
+                start_line: parseInt(lineNum),
+                end_line: parseInt(lineNum),
+                annotation_level: annotationLevel,
+                message: `${escapedDesc} ${link ? ` More info: ${link}` : ''}`,
+                title: `${code} in ${relative}`,
+              });
+            }
+            
+            logContent.split("\n").forEach((line) => {
+              patterns.some(({ pattern, type }) => {
+                const match = line.match(pattern);
+                if (match) {
+                  foundMatch = true;
+                  processMatch(match, type, changedFileLineData);
+                  return true;
+                }
+                return false;
+              });
+            });
+            const mdComment = lines.join("\n");
+            // Delete old comment, if exist. Then if warning exist then comment.
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            });
+            const previousComment = comments.data.find(comment => comment.body.includes("Code Analyzer Warning") && comment.user.type === 'Bot');
+            if (previousComment != null) {
+              await github.rest.issues.deleteComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                name: "Example Check Run",
-                head_sha: context.sha,
-                status: "completed",
-                conclusion: "neutral",
+                comment_id: previousComment.id
+              });
+            }
+            if (foundMatch) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: mdComment
+              });
+              const response = await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Code Analyzer Check',
+                head_sha: '${{ github.event.pull_request.head.sha }}',
+                status: 'completed',
+                conclusion: foundWarning ? 'failure' : 'success',
                 output: {
-                  title: "Example Check Run Output",
-                  summary: "This is the summary of the check.",
-                  text: "This provides additional text explaining what the check run did.",
+                  title: 'Code Analyzer Check',
+                  summary: 'There are potential issues detected by code analyzer',
                   annotations: annotations
                 }
               });
-              console.log(check);
-              console.log("Check created successfully:", check.data);
-            } catch (error) {
-              console.error("Error creating check:", error);
+              console.log(response);
             }
+            console.log(mdComment);
