@@ -1,0 +1,4 @@
+**/bin/*
+**/obj/*
+AlwaysFailNUnitTest/obj
+test-app/test-app/obj

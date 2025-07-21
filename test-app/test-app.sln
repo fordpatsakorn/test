@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-app", "test-app\test-a
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlwaysFailNUnitTest", "..\AlwaysFailNUnitTest\AlwaysFailNUnitTest.csproj", "{D40009D5-AC98-4592-B3C7-0B06AC686486}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowAccount.Roslyn.Analyzers", "..\FlowAccount.Roslyn.Analyzers\FlowAccount.Roslyn.Analyzers.csproj", "{56A0D738-C0AB-43C5-B96F-C512FD64B1BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{D40009D5-AC98-4592-B3C7-0B06AC686486}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D40009D5-AC98-4592-B3C7-0B06AC686486}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D40009D5-AC98-4592-B3C7-0B06AC686486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A0D738-C0AB-43C5-B96F-C512FD64B1BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A0D738-C0AB-43C5-B96F-C512FD64B1BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A0D738-C0AB-43C5-B96F-C512FD64B1BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A0D738-C0AB-43C5-B96F-C512FD64B1BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

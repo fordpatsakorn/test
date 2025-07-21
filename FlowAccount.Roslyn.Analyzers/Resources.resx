@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+              xmlns="">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <data name="FAWRN0001Title" xml:space="preserve">
+    <value>LINQ query must use at least one property with [NotOptional] attribute in the where clause.</value>
+  </data>
+  <data name="FAWRN0001MessageFormat" xml:space="preserve">
+    <value>Query in method '{0}' does not include the required properties, add at least one required property</value>
+  </data>
+  <data name="FAWRN0001Category" xml:space="preserve">
+    <value>Entity Framework</value>
+  </data>
+  <data name="FAWRN0001Description" xml:space="preserve">
+    <value>When working with IDataHandler&lt;T&gt; types, ensure that your queries include at least one properties marked with [NotOptional] to enforce necessary constraints. This assures business-critical data is accounted for in operations.</value>
+  </data>
+  <data name="FAWRN0001Link" xml:space="preserve">
+    <value>https://flowaccount.atlassian.net/wiki/spaces/fa/pages/142278772/Rules#FAWRN0001</value>
+  </data>
+  <data name="FAINF0001Category" xml:space="preserve">
+    <value>Common</value>
+  </data>
+  <data name="FAINF0001Title" xml:space="preserve">
+    <value>Avoid Blocking Task with Wait/Result</value>
+  </data>
+  <data name="FAINF0001MessageFormat" xml:space="preserve">
+    <value>Use 'await' instead of '{0}'</value>
+  </data>
+  <data name="FAINF0001Description" xml:space="preserve">
+    <value>Using Task.Wait or Task.Result can cause thread blocking and should be replaced with await</value>
+  </data>
+  <data name="FAINF0001Link" xml:space="preserve">
+    <value>https://flowaccount.atlassian.net/wiki/spaces/fa/pages/142278772/Rules#FAINF0001</value>
+  </data>
+  <data name="FAINF0002Title" xml:space="preserve">
+    <value>Avoid directly using raw SQL</value>
+  </data>
+  <data name="FAINF0002Category" xml:space="preserve">
+    <value>Entity Framework</value>
+  </data>
+  <data name="FAINF0002Description" xml:space="preserve">
+    <value>Direct usage of FromSqlRaw or SqlQueryRaw methods can introduce SQL injection vulnerabilities if not handled correctly. These methods should only be used within classes that implement the IDataHandler interface, which is assumed to enforce appropriate safeguards against SQL injection attacks. Refactor your code to ensure raw SQL query execution is properly encapsulated.</value>
+  </data>
+  <data name="FAINF0002MessageFormat" xml:space="preserve">
+    <value>'{0}' should only be used within classes implementing IDataHandler to prevent SQL injection risks.</value>
+  </data>
+  <data name="FAINF0002Link" xml:space="preserve">
+    <value>https://flowaccount.atlassian.net/wiki/spaces/fa/pages/142278772/Rules#FAINF0002</value>
+  </data>
+</root>
