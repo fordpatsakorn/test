@@ -27,7 +27,7 @@ namespace test_app.TestCodeAnalyzer
 
         public void Execute()
         {
-            _context.Set<Entity>().FromSqlRaw("SELECT * FROM Entity"); // Should have warning
+            _context.Set<Entity>().FromSqlRaw("SELECT * FROM Entity"); // Should have warning 
         }
 
     }

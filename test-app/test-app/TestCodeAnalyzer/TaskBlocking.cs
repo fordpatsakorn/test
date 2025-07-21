@@ -8,7 +8,7 @@ public class TaskBlocking
     {
         Task task1 = Task.CompletedTask;
         Task<int> task2 = Task.FromResult(42);
-        task1.Wait(); // Should have warning
-        var result = task2.Result; // Should have warning
+        task1.Wait(); // Should have warning 
+        var result = task2.Result; // Should have warning 
     }
 }
