@@ -6,6 +6,7 @@ public class TaskBlocking2
 {
     void Example()
     {
+        Console.WriteLine("Test");
         Task task1 = Task.CompletedTask;
         Task<int> task2 = Task.FromResult(42);
         task1.Wait(); // Should have warning
