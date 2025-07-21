@@ -24,7 +24,7 @@ jobs:
             9.x
 
       - name: Build Solution
-        run: dotnet build ./test-app/test-app.sln | tee build.log # Output to both build.log and stdout, required for `Extract warning` step
+        run: dotnet build ./test-app/test-app.sln > build.log # Output to both build.log and stdout, required for `Extract warning` step
 
       - name: Extract warning
         uses: actions/github-script@v7
