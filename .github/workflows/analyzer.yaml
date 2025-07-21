@@ -40,7 +40,7 @@ jobs:
             // Map patterns object. Add rules to be detected here.
             const rulePatterns = {
               Warning: { ids: ['FAWRN\\d+'], type: 'Warning' },
-              Information: { ids: ['FAINF\\d+], type: 'Information' },
+              Information: { ids: ['FAINF\\d+'], type: 'Information' },
               Error: { ids: [], type: 'Error' }
             };
             // Example match: `MyFile.cs(12,4): warning AB1234: 'Foo' is obsolete (http://example.com)`
