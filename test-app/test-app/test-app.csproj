@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>test_app</RootNamespace>
     </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\FlowAccount.Roslyn.Analyzers\FlowAccount.Roslyn.Analyzers.csproj"
+                          OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4"/>
