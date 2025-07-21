@@ -35,7 +35,7 @@ namespace Flowaccount.Data
         private readonly IDataHandler<Model> _mockDataHandler = new DataHandler<Model>();
         public void SampleMethod()
         {
-            _mockDataHandler.FindList(m => m.Name == "Test"); // Should warning
+            _mockDataHandler.FindList(m => m.Id == 1 && m.Name == "Test");
         }
     }
 }
