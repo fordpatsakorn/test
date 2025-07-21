@@ -99,7 +99,6 @@ jobs:
             
             logContent.split("\n").forEach((line) => {
               patterns.some(({ pattern, type }) => {
-                console.log(pattern);
                 const match = line.match(pattern);
                 if (match) {
                   foundMatch = true;
