@@ -9,7 +9,7 @@ public class TaskBlocking2
         Task task1 = Task.CompletedTask;
         Task<int> task2 = Task.FromResult(42);
         task1.Wait(); // Should have warning
-        var result = task2.Result; // No warning, because i didn't touch
+        var result = task2.Result; // Should have warning
       
     }
 }
